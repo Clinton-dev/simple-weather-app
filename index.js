@@ -1,5 +1,6 @@
 const form = document.querySelector(".top-banner form");
 
+
 form.addEventListener("submit", e => {
   e.preventDefault();
   const inputVal = form[0].value;
@@ -10,9 +11,31 @@ form.addEventListener("submit", e => {
     .then (res  => res.json())
     .then( data => {
       // do something
+      const {main, name, sys, weather} = data;
+      const icon = `https://openweathermap.org/img/wn/${
+        weather[0]["icon"]}@2x.png`;
+      const li = document.createElement("li");
+      li.classList.add("city");
+      
+      const markup  = `
+        <h2 class="city-name" data-name="${name}, ${sys.country}">
+          <span>${name}</span>
+          <sup>${sys.country}</sup>
+        </h2>
+        <div class="city-temp">
+          ${Math.round(main.temp)}<sup>°C</sup>
+        </div>
+        <figure>
+          <img class="city-icon" src=${icon} alt=${weather[0]["main"]}>
+          <figcaption>${weather[0][description]}</figcaption>
+        </figure>
+      `;
+      li.innerHTML = markup;
+      list.appendChild(li); // where the fuck is list coming from
     })
     .catch(() => {
-      MessageChannel.textContent = "Please search for a valid city";
+      message.textContent = "Please search for a valid city"; // same with msg
     })
 
 });
+
